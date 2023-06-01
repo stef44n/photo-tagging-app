@@ -1,0 +1,10 @@
+header {
+    background-color: darkblue;
+    padding: 30px 40px;
+}
+
+header > h1 {
+    font-size: 60px;
+    color: wheat;
+    margin: 0;
+}

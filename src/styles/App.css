@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap");
+
+body {
+    margin: 0;
+    background-color: black;
+    color: wheat;
+}
+
+.card-placement {
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    row-gap: 20px;
+}
+
+.scoreboard {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 40px 0 0 40px;
+    font-family: "Tilt Warp", cursive;
+    font-size: 40px;
+}
+
+p {
+    margin: 0;
+}
+
+#highSc {
+    position: relative;
+    right: -54px;
+    color: yellow;
+}

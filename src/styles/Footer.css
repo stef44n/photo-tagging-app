@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap");
+
+footer {
+    background-color: darkblue;
+    padding: 10px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+footer > h6 {
+    font-size: 20px;
+    color: wheat;
+    margin: 0;
+    font-family: "Inter", sans-serif;
+}
