@@ -6,41 +6,43 @@ import ash from "./assets/ash.png";
 import tom from "./assets/tom.png";
 import johnny from "./assets/johnny-bravo.png";
 import fullPicture from "./assets/picture.jpg";
+import React, { useState, useEffect } from "react";
+import Dropdown from "./components/Dropdown";
 
 function App() {
-    function myTest(event) {
-        // let clientX = event.clientX; // Window area
-        let imageCoords = event.target.getBoundingClientRect(); //
-        // let clientY = event.clientY; // Window area (Like screen but starts from top of the web page - not screen)
-        // let offsetY = event.currentTarget.offsetY; //
-        // let screenY = event.screenY; // Screen area (Physical monitor screen - always same at cursor position)
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
+
+    const handleImageClick = (event) => {
+        let pageX = event.pageX; //
         let pageY = event.pageY; // Page (From top of the page all the way to the bottom of the page)
-        // let targetY = event.target.y; //
         let targetOffTop = event.target.offsetTop; //
-        // let nativeEventY = event.nativeEvent.y; //
         let imageYcoord = pageY - targetOffTop; //
-        console.log(event);
-        // console.log(`event.clientX = ${clientX}`);
-        console.log(`--------------------`);
-        // console.log(`event.clientY = ${clientY}`);
-        // console.log(`event.offsetY = ${offsetY}`);
-        // console.log(`event.screenY = ${screenY}`);
-        // console.log(`event.pageY = ${pageY}`);
-        console.log(`event.pageX = ${event.pageX}`);
-        // console.log(`event.target.y = ${targetY}`);
-        // console.log(`event.target.offsetTop = ${targetOffTop}`);
-        // console.log(`event.nativeEvent.y = ${nativeEventY}`);
-        // console.log(`exact image Y-coord = ${pageY - screenY}`);
-        // console.log(`exact image Y-coord = ${pageY - targetOffTop}`); // GOOD
-        console.log(`exact image Y-coord = ${imageYcoord}`); // GOOD
-        // console.log(event.target.x);
-        // console.log(event.target.y); // Distance from target/image to top of page
-        console.log(imageCoords); // Distance from target/image to top of page
-        // console.log(event.nativeEvent);
-        // console.log(event.nativeEvent.x);
-        // console.log(event.nativeEvent.y); // Distance from top of page to cursor
-        console.log("MISSED, keep going!");
-    }
+        // const { clientX, clientY } = event;
+        setDropdownPosition({ x: pageX, y: imageYcoord });
+        setIsDropdownVisible(!isDropdownVisible);
+        // console.log(clientX, clientY);
+        // console.log(dropdownPosition);
+    };
+
+    const handleDropdownSelect = (item) => {
+        setSelectedItem(item);
+        setIsDropdownVisible(false);
+    };
+
+    // function myTest(event) {
+    //     let imageCoords = event.target.getBoundingClientRect(); //
+    //     let pageY = event.pageY; // Page (From top of the page all the way to the bottom of the page)
+    //     let targetOffTop = event.target.offsetTop; //
+    //     let imageYcoord = pageY - targetOffTop; //
+    //     console.log(event);
+    //     console.log(`--------------------`);
+    //     console.log(`event.pageX = ${event.pageX}`);
+    //     console.log(`exact image Y-coord = ${imageYcoord}`); // GOOD
+    //     console.log(imageCoords); // Distance from target/image to top of page
+    //     console.log("NOT QUITE, keep going!");
+    // }
 
     function ashFunc() {
         console.log("Found Ash!");
@@ -54,9 +56,42 @@ function App() {
         console.log("Found JB!");
     }
 
+    useEffect(() => {}, []);
+
     return (
         <div className="App">
             <Header />
+            <div
+                hidden={!isDropdownVisible}
+                style={{
+                    // color: "red",
+                    position: `absolute`,
+                    left: `${dropdownPosition.x - 27}px`,
+                    top: `${dropdownPosition.y + 207 - 27}px`,
+                    width: "50px",
+                    height: "50px",
+                    // backgroundColor: "red",
+                    backgroundColor: "rgb(255 255 255 / 20%)",
+                    borderRadius: "100%",
+                    border: "dashed white 2px",
+                }}
+            >
+                <div
+                    hidden={!isDropdownVisible}
+                    style={{
+                        position: `relative`,
+                        left: `${27}px`,
+                        top: `${27}px`,
+                    }}
+                >
+                    {isDropdownVisible && (
+                        <Dropdown onSelect={handleDropdownSelect} />
+                    )}
+                </div>
+            </div>
+
+            {/* {selectedItem && <p>You selected: {selectedItem}</p>} */}
+
             {/* <header className="App-header"> */}
             <img
                 src={ash}
@@ -95,7 +130,7 @@ function App() {
                 // width="100%"
                 // hidden={true}
                 useMap="#pictureMap"
-                onClick={myTest}
+                onClick={handleImageClick}
             />
             <map name="pictureMap">
                 <area
