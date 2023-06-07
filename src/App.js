@@ -13,22 +13,43 @@ function App() {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
+    const [foundCharacters, setFoundCharacters] = useState({
+        ash: false,
+        tom: false,
+        jb: false,
+    });
 
     const handleImageClick = (event) => {
-        let pageX = event.pageX; //
+        let imageXcoord = event.pageX; //
         let pageY = event.pageY; // Page (From top of the page all the way to the bottom of the page)
         let targetOffTop = event.target.offsetTop; //
         let imageYcoord = pageY - targetOffTop; //
         // const { clientX, clientY } = event;
-        setDropdownPosition({ x: pageX, y: imageYcoord });
+        setDropdownPosition({ x: imageXcoord, y: imageYcoord });
         setIsDropdownVisible(!isDropdownVisible);
         // console.log(clientX, clientY);
+        console.log(imageXcoord, imageYcoord);
         // console.log(dropdownPosition);
     };
 
     const handleDropdownSelect = (item) => {
         setSelectedItem(item);
+        // console.log(selectedItem);
+        console.log(dropdownPosition);
         setIsDropdownVisible(false);
+
+        if (
+            dropdownPosition.x >= 64 &&
+            dropdownPosition.x <= 146 &&
+            dropdownPosition.y >= 4218 &&
+            dropdownPosition.y <= 4325 &&
+            item === "Ash"
+        ) {
+            // console.log("ASH has been successfully found");
+            ashFunc();
+        } //"64, 4218, 146, 4325"
+        console.log(item);
+        return item;
     };
 
     // function myTest(event) {
@@ -137,7 +158,10 @@ function App() {
                     alt="ash"
                     shape="rect"
                     coords="64, 4218, 146, 4325"
-                    onClick={ashFunc}
+                    onClick={(e) => {
+                        handleImageClick(e);
+                        // ashFunc();
+                    }}
                 />
                 <area
                     alt="tom"
