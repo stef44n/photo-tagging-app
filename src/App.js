@@ -47,7 +47,28 @@ function App() {
         ) {
             // console.log("ASH has been successfully found");
             ashFunc();
-        } //"64, 4218, 146, 4325"
+        } // "64, 4218, 146, 4325"
+
+        if (
+            dropdownPosition.x >= 2729 &&
+            dropdownPosition.x <= 2836 &&
+            dropdownPosition.y >= 5249 &&
+            dropdownPosition.y <= 5399 &&
+            item === "Tom"
+        ) {
+            tomFunc();
+        } // "2729, 5249, 2836, 5399"
+
+        if (
+            dropdownPosition.x >= 1385 &&
+            dropdownPosition.x <= 1468 &&
+            dropdownPosition.y >= 3057 &&
+            dropdownPosition.y <= 3195 &&
+            item === "Johnny Bravo"
+        ) {
+            jbFunc();
+        } // "1385, 3057, 1468, 3195"
+
         console.log(item);
         return item;
     };
@@ -66,15 +87,48 @@ function App() {
     // }
 
     function ashFunc() {
-        console.log("Found Ash!");
+        // console.log("Found Ash!");
+        if (foundCharacters.ash === false) {
+            console.log("You have now found ASH for the first time");
+            setFoundCharacters((prevData) => {
+                return {
+                    ...prevData,
+                    ash: true,
+                };
+            });
+        } else {
+            console.log("You already found Ash");
+        }
     }
 
     function tomFunc() {
-        console.log("Found Tom!");
+        // console.log("Found Tom!");
+        if (foundCharacters.tom === false) {
+            console.log("You have now found TOM for the first time");
+            setFoundCharacters((prevData) => {
+                return {
+                    ...prevData,
+                    tom: true,
+                };
+            });
+        } else {
+            console.log("You already found Tom");
+        }
     }
 
     function jbFunc() {
-        console.log("Found JB!");
+        // console.log("Found JB!");
+        if (foundCharacters.jb === false) {
+            console.log("You have now found JOHNNY BRAVO for the first time");
+            setFoundCharacters((prevData) => {
+                return {
+                    ...prevData,
+                    jb: true,
+                };
+            });
+        } else {
+            console.log("You already found Johnny Bravo");
+        }
     }
 
     useEffect(() => {}, []);
@@ -167,13 +221,17 @@ function App() {
                     alt="tom"
                     shape="rect"
                     coords="2729, 5249, 2836, 5399"
-                    onClick={tomFunc}
+                    onClick={(e) => {
+                        handleImageClick(e);
+                    }}
                 />
                 <area
                     alt="johnny-bravo"
                     shape="rect"
                     coords="1385, 3057, 1468, 3195"
-                    onClick={jbFunc}
+                    onClick={(e) => {
+                        handleImageClick(e);
+                    }}
                 />
             </map>
 
