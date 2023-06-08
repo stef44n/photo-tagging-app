@@ -96,6 +96,10 @@ function App() {
                     ash: true,
                 };
             });
+            // GAME OVER
+            if (foundCharacters.tom === true && foundCharacters.jb === true) {
+                console.log("ALL CHARACTERS FOUND");
+            }
         } else {
             console.log("You already found Ash");
         }
@@ -111,6 +115,10 @@ function App() {
                     tom: true,
                 };
             });
+
+            if (foundCharacters.ash === true && foundCharacters.jb === true) {
+                console.log("ALL CHARACTERS FOUND");
+            }
         } else {
             console.log("You already found Tom");
         }
@@ -126,6 +134,10 @@ function App() {
                     jb: true,
                 };
             });
+
+            if (foundCharacters.ash === true && foundCharacters.tom === true) {
+                console.log("ALL CHARACTERS FOUND");
+            }
         } else {
             console.log("You already found Johnny Bravo");
         }
