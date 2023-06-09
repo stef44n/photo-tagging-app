@@ -1,35 +1,46 @@
 @import url("https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap");
 
+@keyframes messageDisplay {
+    0% {
+        background-color: transparent;
+    }
+    5% {
+        background-color: red;
+        color: black;
+    }
+    100% {
+        background-color: red;
+        color: black;
+    }
+}
+
 body {
     margin: 0;
     background-color: black;
     color: wheat;
 }
 
-.card-placement {
-    padding: 40px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-    row-gap: 20px;
-}
-
-.scoreboard {
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    padding: 40px 0 0 40px;
-    font-family: "Tilt Warp", cursive;
-    font-size: 40px;
-}
-
 p {
     margin: 0;
 }
 
-#highSc {
-    position: relative;
-    right: -54px;
-    color: yellow;
+.message-wrapper {
+    position: fixed;
+    top: 200px;
+    margin: 0 auto;
+    /* background-color: red; */
+    padding: 10px 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.message {
+    background-color: transparent;
+    color: transparent;
+    padding: 10px 30px;
+    border-radius: 5px;
+    animation-name: messageDisplay;
+    animation-duration: 2s;
 }

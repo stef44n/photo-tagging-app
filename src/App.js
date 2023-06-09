@@ -12,6 +12,7 @@ import Dropdown from "./components/Dropdown";
 function App() {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [message, setMessage] = useState("HELLO");
     const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
     const [foundCharacters, setFoundCharacters] = useState({
         ash: false,
@@ -29,6 +30,7 @@ function App() {
         setIsDropdownVisible(!isDropdownVisible);
         // console.log(clientX, clientY);
         console.log(imageXcoord, imageYcoord);
+        setSelectedItem(null);
         // console.log(dropdownPosition);
     };
 
@@ -48,8 +50,7 @@ function App() {
             // console.log("ASH has been successfully found");
             ashFunc();
         } // "64, 4218, 146, 4325"
-
-        if (
+        else if (
             dropdownPosition.x >= 2729 &&
             dropdownPosition.x <= 2836 &&
             dropdownPosition.y >= 5249 &&
@@ -58,8 +59,7 @@ function App() {
         ) {
             tomFunc();
         } // "2729, 5249, 2836, 5399"
-
-        if (
+        else if (
             dropdownPosition.x >= 1385 &&
             dropdownPosition.x <= 1468 &&
             dropdownPosition.y >= 3057 &&
@@ -68,6 +68,10 @@ function App() {
         ) {
             jbFunc();
         } // "1385, 3057, 1468, 3195"
+        else {
+            setSelectedItem(null);
+            setMessage("Not quite, keep looking");
+        }
 
         console.log(item);
         return item;
@@ -90,6 +94,7 @@ function App() {
         // console.log("Found Ash!");
         if (foundCharacters.ash === false) {
             console.log("You have now found ASH for the first time");
+            setMessage("You have now found ASH for the first time");
             setFoundCharacters((prevData) => {
                 return {
                     ...prevData,
@@ -102,6 +107,7 @@ function App() {
             }
         } else {
             console.log("You already found Ash");
+            setMessage("You already found Ash");
         }
     }
 
@@ -109,6 +115,7 @@ function App() {
         // console.log("Found Tom!");
         if (foundCharacters.tom === false) {
             console.log("You have now found TOM for the first time");
+            setMessage("You have now found TOM for the first time");
             setFoundCharacters((prevData) => {
                 return {
                     ...prevData,
@@ -121,6 +128,7 @@ function App() {
             }
         } else {
             console.log("You already found Tom");
+            setMessage("You already found Tom");
         }
     }
 
@@ -128,6 +136,7 @@ function App() {
         // console.log("Found JB!");
         if (foundCharacters.jb === false) {
             console.log("You have now found JOHNNY BRAVO for the first time");
+            setMessage("You have now found JOHNNY BRAVO for the first time");
             setFoundCharacters((prevData) => {
                 return {
                     ...prevData,
@@ -140,6 +149,7 @@ function App() {
             }
         } else {
             console.log("You already found Johnny Bravo");
+            setMessage("You already found Johnny Bravo");
         }
     }
 
@@ -217,7 +227,10 @@ function App() {
                 // width="100%"
                 // hidden={true}
                 useMap="#pictureMap"
-                onClick={handleImageClick}
+                // onClick={handleImageClick}
+                onClick={(e) => {
+                    handleImageClick(e);
+                }}
             />
             <map name="pictureMap">
                 <area
@@ -246,7 +259,11 @@ function App() {
                     }}
                 />
             </map>
-
+            {!isDropdownVisible && selectedItem && (
+                <div className="message-wrapper">
+                    <h1 className="message">{message}</h1>
+                </div>
+            )}
             {/* <Footer /> */}
         </div>
     );
