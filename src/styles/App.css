@@ -42,5 +42,36 @@ p {
     padding: 10px 30px;
     border-radius: 5px;
     animation-name: messageDisplay;
-    animation-duration: 2s;
+    animation-duration: 1s;
+}
+
+.onStart-wrapper {
+    position: fixed;
+    top: 200px;
+    margin: 0 auto;
+    /* background-color: black; */
+    padding: 10px 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /* pointer-events: none; */
+}
+
+.onStart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: solid;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: darkslategrey;
+}
+
+.onStart-figures {
+    display: flex;
+}
+
+figcaption {
+    text-align: center;
+    padding-bottom: 5px;
 }
