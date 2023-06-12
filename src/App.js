@@ -12,6 +12,7 @@ import Dropdown from "./components/Dropdown";
 function App() {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [gameStarted, setGameStarted] = useState(false);
     const [message, setMessage] = useState("HELLO");
     const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
     const [foundCharacters, setFoundCharacters] = useState({
@@ -19,6 +20,10 @@ function App() {
         tom: false,
         jb: false,
     });
+
+    const startTheGame = () => {
+        setGameStarted(true);
+    };
 
     const handleImageClick = (event) => {
         let imageXcoord = event.pageX; //
@@ -29,6 +34,7 @@ function App() {
         setDropdownPosition({ x: imageXcoord, y: imageYcoord });
         setIsDropdownVisible(!isDropdownVisible);
         // console.log(clientX, clientY);
+        console.log(pageY);
         console.log(imageXcoord, imageYcoord);
         setSelectedItem(null);
         // console.log(dropdownPosition);
@@ -69,7 +75,7 @@ function App() {
             jbFunc();
         } // "1385, 3057, 1468, 3195"
         else {
-            setSelectedItem(null);
+            // setSelectedItem(null);
             setMessage("Not quite, keep looking");
         }
 
@@ -94,7 +100,7 @@ function App() {
         // console.log("Found Ash!");
         if (foundCharacters.ash === false) {
             console.log("You have now found ASH for the first time");
-            setMessage("You have now found ASH for the first time");
+            setMessage("You found ASH!");
             setFoundCharacters((prevData) => {
                 return {
                     ...prevData,
@@ -115,7 +121,7 @@ function App() {
         // console.log("Found Tom!");
         if (foundCharacters.tom === false) {
             console.log("You have now found TOM for the first time");
-            setMessage("You have now found TOM for the first time");
+            setMessage("You found TOM!");
             setFoundCharacters((prevData) => {
                 return {
                     ...prevData,
@@ -136,7 +142,7 @@ function App() {
         // console.log("Found JB!");
         if (foundCharacters.jb === false) {
             console.log("You have now found JOHNNY BRAVO for the first time");
-            setMessage("You have now found JOHNNY BRAVO for the first time");
+            setMessage("You found JOHNNY BRAVO!");
             setFoundCharacters((prevData) => {
                 return {
                     ...prevData,
@@ -164,7 +170,7 @@ function App() {
                     // color: "red",
                     position: `absolute`,
                     left: `${dropdownPosition.x - 27}px`,
-                    top: `${dropdownPosition.y + 207 - 27}px`,
+                    top: `${dropdownPosition.y + 129 - 27}px`,
                     width: "50px",
                     height: "50px",
                     // backgroundColor: "red",
@@ -190,48 +196,64 @@ function App() {
             {/* {selectedItem && <p>You selected: {selectedItem}</p>} */}
 
             {/* <header className="App-header"> */}
-            <img
-                src={ash}
-                className="ash"
-                alt="ash"
-                width="100px"
-                hidden={true}
-            />
-            <img
-                src={tom}
-                className="tom"
-                alt="tom"
-                width="100px"
-                hidden={true}
-            />
-            <img
-                src={johnny}
-                className="johnny-bravo"
-                alt="johnny-bravo"
-                width="100px"
-                hidden={true}
-            />
-            <p>
-                Timer - <code>start when picture loads</code>
-            </p>
-            <p>picture</p>
-            <p>Tom, Ash, Bravo</p>
-            {/* </header> */}
-            <button>NEW GAME</button>
-            <br />
-            <img
-                src={fullPicture}
-                className="background"
-                alt="background"
-                // width="1500px"
-                // width="100%"
-                // hidden={true}
-                useMap="#pictureMap"
-                // onClick={handleImageClick}
-                onClick={(e) => {
-                    handleImageClick(e);
-                }}
-            />
+
+            {!gameStarted && (
+                <div className="onStart-wrapper">
+                    <div className="onStart">
+                        <h2>Can you find these characters?</h2>
+                        <div className="onStart-figures">
+                            <figure>
+                                <figcaption>Ash</figcaption>
+                                <img
+                                    src={ash}
+                                    className="ash"
+                                    alt="ash"
+                                    height="150px"
+                                    // hidden={true}
+                                />
+                            </figure>
+                            <figure>
+                                <figcaption>Tom</figcaption>
+                                <img
+                                    src={tom}
+                                    className="tom"
+                                    alt="tom"
+                                    height="150px"
+                                    // hidden={true}
+                                />
+                            </figure>
+                            <figure>
+                                <figcaption>Johnny Bravo</figcaption>
+                                <img
+                                    src={johnny}
+                                    className="johnny-bravo"
+                                    alt="johnny-bravo"
+                                    height="150px"
+                                    // hidden={true}
+                                />
+                            </figure>
+                        </div>
+                        {/* </header> */}
+                        <button onClick={startTheGame}>NEW GAME</button>
+                    </div>
+                </div>
+            )}
+
+            {gameStarted && (
+                <img
+                    src={fullPicture}
+                    className="background"
+                    alt="background"
+                    // width="1500px"
+                    // width="100%"
+                    // hidden={true}
+                    useMap="#pictureMap"
+                    // onClick={handleImageClick}
+                    onClick={(e) => {
+                        handleImageClick(e);
+                    }}
+                />
+            )}
             <map name="pictureMap">
                 <area
                     alt="ash"
@@ -259,12 +281,12 @@ function App() {
                     }}
                 />
             </map>
+
             {!isDropdownVisible && selectedItem && (
                 <div className="message-wrapper">
                     <h1 className="message">{message}</h1>
                 </div>
             )}
-            {/* <Footer /> */}
         </div>
     );
 }
