@@ -163,14 +163,14 @@ function App() {
 
     return (
         <div className="App">
-            <Header />
+            {!gameStarted && <Header />}
             <div
                 hidden={!isDropdownVisible}
                 style={{
                     // color: "red",
                     position: `absolute`,
                     left: `${dropdownPosition.x - 27}px`,
-                    top: `${dropdownPosition.y + 129 - 27}px`,
+                    top: `${dropdownPosition.y - 27}px`,
                     width: "50px",
                     height: "50px",
                     // backgroundColor: "red",
@@ -196,6 +196,46 @@ function App() {
             {/* {selectedItem && <p>You selected: {selectedItem}</p>} */}
 
             {/* <header className="App-header"> */}
+            {gameStarted && (
+                <div className="timer-wrapper">
+                    <div>
+                        <p>Timer</p>
+                    </div>
+                    <div className="timer-images">
+                        <img
+                            src={ash}
+                            className="ash horizontal-bar"
+                            alt="ash"
+                            // hidden={true}
+                            style={{
+                                border: foundCharacters.ash
+                                    ? "solid green"
+                                    : "none",
+                            }}
+                        />
+                        <img
+                            src={tom}
+                            className="tom horizontal-bar"
+                            alt="tom"
+                            style={{
+                                border: foundCharacters.tom
+                                    ? "solid green"
+                                    : "none",
+                            }}
+                        />
+                        <img
+                            src={johnny}
+                            className="johnny-bravo horizontal-bar"
+                            alt="johnny-bravo"
+                            style={{
+                                border: foundCharacters.jb
+                                    ? "solid green"
+                                    : "none",
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
 
             {!gameStarted && (
                 <div className="onStart-wrapper">
