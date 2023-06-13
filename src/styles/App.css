@@ -14,6 +14,15 @@
     }
 }
 
+@keyframes imageHover {
+    100% {
+        transform: scale(3);
+        transform-origin: 100% 0%;
+        border-radius: 5px;
+        box-shadow: inset 0px 0px 15px 0px black;
+    }
+}
+
 body {
     margin: 0;
     background-color: black;
@@ -74,4 +83,39 @@ p {
 figcaption {
     text-align: center;
     padding-bottom: 5px;
+}
+
+.timer-wrapper {
+    background-color: darkslategray;
+    position: fixed;
+    /* top: 0px; */
+    left: 0px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.horizontal-bar {
+    background-color: darkslategray;
+    height: 50px;
+    padding: 10px;
+    /* opacity: 50%; */
+    /* mix-blend-mode: multiply; */
+    z-index: 0;
+}
+
+.horizontal-bar:hover {
+    background-color: darkslategray;
+    animation-name: imageHover;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+    z-index: 2;
+}
+
+.timer-images {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
 }
