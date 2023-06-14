@@ -1,7 +1,7 @@
 // import logo from './logo.svg';
 import "./styles/App.css";
 import Header from "./components/Header";
-// import Footer from "./components/Footer";
+import Timer from "./components/Timer";
 import ash from "./assets/ash.png";
 import tom from "./assets/tom.png";
 import johnny from "./assets/johnny-bravo.png";
@@ -13,6 +13,7 @@ function App() {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [gameStarted, setGameStarted] = useState(false);
+    const [isTimerRunning, setIsTimerRunning] = useState(true);
     const [message, setMessage] = useState("HELLO");
     const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
     const [foundCharacters, setFoundCharacters] = useState({
@@ -23,6 +24,10 @@ function App() {
 
     const startTheGame = () => {
         setGameStarted(true);
+    };
+
+    const handleStopTimer = () => {
+        setIsTimerRunning(false);
     };
 
     const handleImageClick = (event) => {
@@ -159,7 +164,15 @@ function App() {
         }
     }
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        if (
+            foundCharacters.ash === true &&
+            foundCharacters.tom === true &&
+            foundCharacters.jb === true
+        ) {
+            handleStopTimer();
+        }
+    }, [foundCharacters]);
 
     return (
         <div className="App">
@@ -198,8 +211,8 @@ function App() {
             {/* <header className="App-header"> */}
             {gameStarted && (
                 <div className="timer-wrapper">
-                    <div>
-                        <p>Timer</p>
+                    <div className="timer">
+                        <Timer isTimerRunning={isTimerRunning} />
                     </div>
                     <div className="timer-images">
                         <img
