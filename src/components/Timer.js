@@ -22,7 +22,7 @@ const Timer = ({ isTimerRunning }) => {
     }, [minutes, seconds, isTimerRunning]);
 
     return (
-        <p>
+        <p id="time">
             {minutes.toString().padStart(2, "0")}:
             {seconds.toString().padStart(2, "0")}
         </p>
