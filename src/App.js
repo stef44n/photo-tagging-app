@@ -15,6 +15,7 @@ function App() {
     const [gameStarted, setGameStarted] = useState(false);
     const [isTimerRunning, setIsTimerRunning] = useState(true);
     const [message, setMessage] = useState("HELLO");
+    const [nameForHS, setNameForHS] = useState("");
     const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
     const [foundCharacters, setFoundCharacters] = useState({
         ash: false,
@@ -164,6 +165,13 @@ function App() {
         }
     }
 
+    const handleChange = (event) => {
+        setNameForHS(event.target.value);
+        console.log(event.target.value);
+        // console.log(event.target.valueAsDate);
+        // console.log(event.target.valueAsDate.toDateString());
+    };
+
     useEffect(() => {
         if (
             foundCharacters.ash === true &&
@@ -177,34 +185,36 @@ function App() {
     return (
         <div className="App">
             {!gameStarted && <Header />}
-            <div
-                hidden={!isDropdownVisible}
-                style={{
-                    // color: "red",
-                    position: `absolute`,
-                    left: `${dropdownPosition.x - 27}px`,
-                    top: `${dropdownPosition.y - 27}px`,
-                    width: "50px",
-                    height: "50px",
-                    // backgroundColor: "red",
-                    backgroundColor: "rgb(255 255 255 / 20%)",
-                    borderRadius: "100%",
-                    border: "dashed white 2px",
-                }}
-            >
+            {isDropdownVisible && isTimerRunning && (
                 <div
                     hidden={!isDropdownVisible}
                     style={{
-                        position: `relative`,
-                        left: `${27}px`,
-                        top: `${27}px`,
+                        // color: "red",
+                        position: `absolute`,
+                        left: `${dropdownPosition.x - 27}px`,
+                        top: `${dropdownPosition.y - 27}px`,
+                        width: "50px",
+                        height: "50px",
+                        // backgroundColor: "red",
+                        backgroundColor: "rgb(255 255 255 / 20%)",
+                        borderRadius: "100%",
+                        border: "dashed white 2px",
                     }}
                 >
-                    {isDropdownVisible && (
-                        <Dropdown onSelect={handleDropdownSelect} />
-                    )}
+                    <div
+                        hidden={!isDropdownVisible}
+                        style={{
+                            position: `relative`,
+                            left: `${27}px`,
+                            top: `${27}px`,
+                        }}
+                    >
+                        {isDropdownVisible && (
+                            <Dropdown onSelect={handleDropdownSelect} />
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* {selectedItem && <p>You selected: {selectedItem}</p>} */}
 
@@ -222,7 +232,7 @@ function App() {
                             // hidden={true}
                             style={{
                                 border: foundCharacters.ash
-                                    ? "solid green"
+                                    ? "solid seagreen"
                                     : "none",
                             }}
                         />
@@ -232,7 +242,7 @@ function App() {
                             alt="tom"
                             style={{
                                 border: foundCharacters.tom
-                                    ? "solid green"
+                                    ? "solid seagreen"
                                     : "none",
                             }}
                         />
@@ -242,7 +252,7 @@ function App() {
                             alt="johnny-bravo"
                             style={{
                                 border: foundCharacters.jb
-                                    ? "solid green"
+                                    ? "solid seagreen"
                                     : "none",
                             }}
                         />
@@ -250,8 +260,46 @@ function App() {
                 </div>
             )}
 
+            {!isTimerRunning && (
+                <div className="wrapper">
+                    <div className="highScore-form">
+                        <p>
+                            You found all characters in{" "}
+                            {document
+                                .querySelector("#time")
+                                .textContent.substring(0, 2) !== "00" &&
+                                `${document
+                                    .querySelector("#time")
+                                    .textContent.substring(0, 2)}
+                            minutes and `}
+                            {document
+                                .querySelector("#time")
+                                .textContent.substring(3)}{" "}
+                            seconds.
+                        </p>
+                        <p>Submit your time to the leaderboard!</p>
+                        <div className="fieldset">
+                            <label htmlFor="nameHS">Name:</label>
+                            <input
+                                className="nameInput"
+                                type="text"
+                                placeholder="Add your name"
+                                onChange={handleChange}
+                                name="nameHS"
+                                value={nameForHS}
+                                minLength={3}
+                                maxLength={10}
+                                pattern="^((?!kkk).)*$"
+                            ></input>
+                            <p>{document.querySelector("#time").textContent}</p>
+                        </div>
+                        <button>SUBMIT</button>
+                    </div>
+                </div>
+            )}
+
             {!gameStarted && (
-                <div className="onStart-wrapper">
+                <div className="wrapper">
                     <div className="onStart">
                         <h2>Can you find these characters?</h2>
                         <div className="onStart-figures">
