@@ -16,7 +16,7 @@
 
 @keyframes imageHover {
     100% {
-        transform: scale(3);
+        transform: scale(5);
         transform-origin: 100% 0%;
         border-radius: 5px;
         box-shadow: inset 0px 0px 15px 0px black;
@@ -35,7 +35,7 @@ p {
 
 .message-wrapper {
     position: fixed;
-    top: 200px;
+    top: 100px;
     margin: 0 auto;
     /* background-color: red; */
     padding: 10px 30px;
@@ -54,7 +54,7 @@ p {
     animation-duration: 1s;
 }
 
-.onStart-wrapper {
+.wrapper {
     position: fixed;
     top: 200px;
     margin: 0 auto;
@@ -95,6 +95,7 @@ figcaption {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 1;
 }
 
 .horizontal-bar {
@@ -117,5 +118,38 @@ figcaption {
 .timer-images {
     display: flex;
     gap: 20px;
-    padding: 10px;
+    padding: 10px 20px;
+}
+
+.timer {
+    padding: 10px 20px;
+}
+
+.timer > p {
+    font-size: xxx-large;
+}
+
+.highScore-form {
+    background-color: darkslategray;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    border: solid 12px seagreen;
+    box-shadow: 0px 0px 15px 0px white;
+}
+
+.fieldset {
+    display: flex;
+    padding: 20px;
+    gap: 10px;
+}
+
+.nameInput {
+    background-color: wheat;
+    border: none;
+    outline: none;
+    text-align: center;
+    border-radius: 3px;
 }
