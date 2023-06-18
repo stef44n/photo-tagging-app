@@ -14,6 +14,7 @@ function App() {
     const [selectedItem, setSelectedItem] = useState(null);
     const [gameStarted, setGameStarted] = useState(false);
     const [isTimerRunning, setIsTimerRunning] = useState(true);
+    const [isLeaderboardVisible, setIsLeaderboardVisible] = useState(false);
     const [message, setMessage] = useState("HELLO");
     const [nameForHS, setNameForHS] = useState("");
     const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
@@ -22,6 +23,48 @@ function App() {
         tom: false,
         jb: false,
     });
+    const [testData, setTestData] = useState([
+        {
+            name: "CONTROL",
+            time: "03:30",
+            date: "30 jan",
+        },
+        {
+            name: "John Doe",
+            time: "09:30",
+            date: "2023-06-17",
+        },
+        {
+            name: "Jane Smith",
+            time: "02:45",
+            date: "2023-06-18",
+        },
+        {
+            name: "David Johnson",
+            time: "11:15",
+            date: "2023-06-19",
+        },
+        {
+            name: "Sarah Williams",
+            time: "06:00",
+            date: "2023-06-20",
+        },
+        {
+            name: "Michael Brown",
+            time: "00:20",
+            date: "2023-06-21",
+        },
+        {
+            name: "Emily Taylor",
+            time: "03:10",
+            date: "2023-06-22",
+        },
+        {
+            name: "Christopher Anderson",
+            time: "12:45",
+            date: "2023-06-23",
+        },
+    ]);
 
     const startTheGame = () => {
         setGameStarted(true);
@@ -88,19 +131,6 @@ function App() {
         console.log(item);
         return item;
     };
-
-    // function myTest(event) {
-    //     let imageCoords = event.target.getBoundingClientRect(); //
-    //     let pageY = event.pageY; // Page (From top of the page all the way to the bottom of the page)
-    //     let targetOffTop = event.target.offsetTop; //
-    //     let imageYcoord = pageY - targetOffTop; //
-    //     console.log(event);
-    //     console.log(`--------------------`);
-    //     console.log(`event.pageX = ${event.pageX}`);
-    //     console.log(`exact image Y-coord = ${imageYcoord}`); // GOOD
-    //     console.log(imageCoords); // Distance from target/image to top of page
-    //     console.log("NOT QUITE, keep going!");
-    // }
 
     function ashFunc() {
         // console.log("Found Ash!");
@@ -172,6 +202,33 @@ function App() {
         // console.log(event.target.valueAsDate.toDateString());
     };
 
+    const addToLeaderboard = () => {
+        // connect everything here
+        //settestdata ...prev, {name, time, date}
+        const currentDate = `${new Date().getUTCDate()}/${new Date().getUTCMonth()}/${new Date().getUTCFullYear()}`;
+        const newEntry = {
+            name: nameForHS,
+            time: document.querySelector("#time").textContent,
+            date: currentDate,
+        };
+
+        setTestData((prevData) => {
+            return [...prevData, newEntry];
+        });
+
+        setIsLeaderboardVisible(true);
+    };
+
+    const sortedTestData = testData.sort((a, b) => {
+        const [minutesA, secondsA] = a.time.split(":");
+        const [minutesB, secondsB] = b.time.split(":");
+        const timeNumberA =
+            parseInt(minutesA, 10) * 60 + parseInt(secondsA, 10);
+        const timeNumberB =
+            parseInt(minutesB, 10) * 60 + parseInt(secondsB, 10);
+        return timeNumberA - timeNumberB;
+    });
+
     useEffect(() => {
         if (
             foundCharacters.ash === true &&
@@ -216,9 +273,6 @@ function App() {
                 </div>
             )}
 
-            {/* {selectedItem && <p>You selected: {selectedItem}</p>} */}
-
-            {/* <header className="App-header"> */}
             {gameStarted && (
                 <div className="timer-wrapper">
                     <div className="timer">
@@ -287,13 +341,13 @@ function App() {
                                 onChange={handleChange}
                                 name="nameHS"
                                 value={nameForHS}
-                                minLength={3}
+                                minLength={1}
                                 maxLength={10}
                                 pattern="^((?!kkk).)*$"
                             ></input>
                             <p>{document.querySelector("#time").textContent}</p>
                         </div>
-                        <button>SUBMIT</button>
+                        <button onClick={addToLeaderboard}>SUBMIT</button>
                     </div>
                 </div>
             )}
@@ -345,9 +399,6 @@ function App() {
                     src={fullPicture}
                     className="background"
                     alt="background"
-                    // width="1500px"
-                    // width="100%"
-                    // hidden={true}
                     useMap="#pictureMap"
                     // onClick={handleImageClick}
                     onClick={(e) => {
@@ -386,6 +437,40 @@ function App() {
             {!isDropdownVisible && selectedItem && (
                 <div className="message-wrapper">
                     <h1 className="message">{message}</h1>
+                </div>
+            )}
+
+            {isLeaderboardVisible && (
+                <div className="wrapper">
+                    <div className="leaderboard">
+                        <h1>Leaderboard</h1>
+                        <table>
+                            <tr>
+                                <th>Place</th>
+                                <th>Name</th>
+                                <th>Time</th>
+                                <th>Date</th>
+                            </tr>
+                            {/* REPLACE WITH DATA FROM FIREBASE */}
+                            <tr>
+                                <td>3</td>
+                                <td>Me</td>
+                                <td>02:00</td>
+                                <td>21/12/21</td>
+                            </tr>
+
+                            {sortedTestData.map((player) => (
+                                <tr key={player.name + player.time}>
+                                    <td>
+                                        position {testData.indexOf(player) + 1}
+                                    </td>
+                                    <td>{player.name}</td>
+                                    <td>{player.time}</td>
+                                    <td>{player.date}</td>
+                                </tr>
+                            ))}
+                        </table>
+                    </div>
                 </div>
             )}
         </div>
