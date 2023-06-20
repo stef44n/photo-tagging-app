@@ -8,6 +8,8 @@ import johnny from "./assets/johnny-bravo.png";
 import fullPicture from "./assets/picture.jpg";
 import React, { useState, useEffect } from "react";
 import Dropdown from "./components/Dropdown";
+import { db } from "./config/firebase";
+import { getDocs, collection, addDoc } from "firebase/firestore";
 
 function App() {
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -15,7 +17,7 @@ function App() {
     const [gameStarted, setGameStarted] = useState(false);
     const [isTimerRunning, setIsTimerRunning] = useState(true);
     const [isLeaderboardVisible, setIsLeaderboardVisible] = useState(false);
-    const [message, setMessage] = useState("HELLO");
+    const [message, setMessage] = useState(" ");
     const [nameForHS, setNameForHS] = useState("");
     const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
     const [foundCharacters, setFoundCharacters] = useState({
@@ -23,48 +25,7 @@ function App() {
         tom: false,
         jb: false,
     });
-    const [testData, setTestData] = useState([
-        {
-            name: "CONTROL",
-            time: "03:30",
-            date: "30 jan",
-        },
-        {
-            name: "John Doe",
-            time: "09:30",
-            date: "2023-06-17",
-        },
-        {
-            name: "Jane Smith",
-            time: "02:45",
-            date: "2023-06-18",
-        },
-        {
-            name: "David Johnson",
-            time: "11:15",
-            date: "2023-06-19",
-        },
-        {
-            name: "Sarah Williams",
-            time: "06:00",
-            date: "2023-06-20",
-        },
-        {
-            name: "Michael Brown",
-            time: "00:20",
-            date: "2023-06-21",
-        },
-        {
-            name: "Emily Taylor",
-            time: "03:10",
-            date: "2023-06-22",
-        },
-        {
-            name: "Christopher Anderson",
-            time: "12:45",
-            date: "2023-06-23",
-        },
-    ]);
+    const [highScores, setHighScores] = useState([]);
 
     const startTheGame = () => {
         setGameStarted(true);
@@ -72,6 +33,44 @@ function App() {
 
     const handleStopTimer = () => {
         setIsTimerRunning(false);
+    };
+
+    const leaderboardCollectionRef = collection(db, "leaderboard");
+
+    const getLeaderboard = async () => {
+        try {
+            const data = await getDocs(leaderboardCollectionRef);
+            const filteredData = data.docs.map((doc) => ({
+                ...doc.data(),
+                id: doc.id,
+            }));
+            console.log(data);
+            console.log(filteredData);
+            setHighScores(filteredData);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const showLeaderboard = () => {
+        setIsLeaderboardVisible(true);
+    };
+
+    const goToHomeScreen = () => {
+        // const [highScores, setHighScores] = useState([]);
+        setIsDropdownVisible(false);
+        setSelectedItem(null);
+        setGameStarted(false);
+        setIsTimerRunning(true);
+        setIsLeaderboardVisible(false);
+        setMessage(" ");
+        setNameForHS("");
+        setDropdownPosition({ x: 0, y: 0 });
+        setFoundCharacters({
+            ash: false,
+            tom: false,
+            jb: false,
+        });
     };
 
     const handleImageClick = (event) => {
@@ -202,24 +201,37 @@ function App() {
         // console.log(event.target.valueAsDate.toDateString());
     };
 
-    const addToLeaderboard = () => {
+    const addToLeaderboard = async () => {
         // connect everything here
         //settestdata ...prev, {name, time, date}
-        const currentDate = `${new Date().getUTCDate()}/${new Date().getUTCMonth()}/${new Date().getUTCFullYear()}`;
+        const currentDate = `${new Date().getUTCDate()}/${
+            new Date().getUTCMonth() + 1
+        }/${new Date().getUTCFullYear()}`;
+        const timePlayed = document.querySelector("#time").textContent;
         const newEntry = {
             name: nameForHS,
-            time: document.querySelector("#time").textContent,
+            time: timePlayed,
             date: currentDate,
         };
 
-        setTestData((prevData) => {
+        try {
+            await addDoc(leaderboardCollectionRef, {
+                name: nameForHS,
+                time: timePlayed,
+                date: currentDate,
+            });
+        } catch (err) {
+            console.error(err);
+        }
+
+        setHighScores((prevData) => {
             return [...prevData, newEntry];
         });
 
         setIsLeaderboardVisible(true);
     };
 
-    const sortedTestData = testData.sort((a, b) => {
+    const sortedTestData = highScores.sort((a, b) => {
         const [minutesA, secondsA] = a.time.split(":");
         const [minutesB, secondsB] = b.time.split(":");
         const timeNumberA =
@@ -237,11 +249,15 @@ function App() {
         ) {
             handleStopTimer();
         }
+
+        getLeaderboard();
     }, [foundCharacters]);
 
     return (
         <div className="App">
             {!gameStarted && <Header />}
+
+            {/* DROPDOWN */}
             {isDropdownVisible && isTimerRunning && (
                 <div
                     hidden={!isDropdownVisible}
@@ -256,6 +272,7 @@ function App() {
                         backgroundColor: "rgb(255 255 255 / 20%)",
                         borderRadius: "100%",
                         border: "dashed white 2px",
+                        cursor: "crosshair",
                     }}
                 >
                     <div
@@ -273,6 +290,7 @@ function App() {
                 </div>
             )}
 
+            {/* TIMER and THUMBNAILS */}
             {gameStarted && (
                 <div className="timer-wrapper">
                     <div className="timer">
@@ -314,7 +332,8 @@ function App() {
                 </div>
             )}
 
-            {!isTimerRunning && (
+            {/* ADD TO LEADERBOARD FORM */}
+            {!isTimerRunning && !isLeaderboardVisible && (
                 <div className="wrapper">
                     <div className="highScore-form">
                         <p>
@@ -352,7 +371,8 @@ function App() {
                 </div>
             )}
 
-            {!gameStarted && (
+            {/* INITIAL WELCOME SCREEN */}
+            {!gameStarted && !isLeaderboardVisible && (
                 <div className="wrapper">
                     <div className="onStart">
                         <h2>Can you find these characters?</h2>
@@ -364,7 +384,6 @@ function App() {
                                     className="ash"
                                     alt="ash"
                                     height="150px"
-                                    // hidden={true}
                                 />
                             </figure>
                             <figure>
@@ -374,7 +393,6 @@ function App() {
                                     className="tom"
                                     alt="tom"
                                     height="150px"
-                                    // hidden={true}
                                 />
                             </figure>
                             <figure>
@@ -384,16 +402,20 @@ function App() {
                                     className="johnny-bravo"
                                     alt="johnny-bravo"
                                     height="150px"
-                                    // hidden={true}
                                 />
                             </figure>
                         </div>
-                        {/* </header> */}
-                        <button onClick={startTheGame}>NEW GAME</button>
+                        <div className="onStart-buttons">
+                            <button onClick={startTheGame}>NEW GAME</button>
+                            <button onClick={showLeaderboard}>
+                                Show Leaderboard
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
 
+            {/* MAIN IMAGE */}
             {gameStarted && (
                 <img
                     src={fullPicture}
@@ -434,42 +456,41 @@ function App() {
                 />
             </map>
 
+            {/* MESSAGE DIV */}
             {!isDropdownVisible && selectedItem && (
                 <div className="message-wrapper">
                     <h1 className="message">{message}</h1>
                 </div>
             )}
 
+            {/* LEADERBOARD */}
             {isLeaderboardVisible && (
                 <div className="wrapper">
                     <div className="leaderboard">
                         <h1>Leaderboard</h1>
                         <table>
-                            <tr>
-                                <th>Place</th>
-                                <th>Name</th>
-                                <th>Time</th>
-                                <th>Date</th>
-                            </tr>
-                            {/* REPLACE WITH DATA FROM FIREBASE */}
-                            <tr>
-                                <td>3</td>
-                                <td>Me</td>
-                                <td>02:00</td>
-                                <td>21/12/21</td>
-                            </tr>
-
-                            {sortedTestData.map((player) => (
-                                <tr key={player.name + player.time}>
-                                    <td>
-                                        position {testData.indexOf(player) + 1}
-                                    </td>
-                                    <td>{player.name}</td>
-                                    <td>{player.time}</td>
-                                    <td>{player.date}</td>
+                            <thead>
+                                <tr>
+                                    <th>PLACE</th>
+                                    <th>NAME</th>
+                                    <th>TIME</th>
+                                    <th>DATE</th>
                                 </tr>
-                            ))}
+                            </thead>
+                            <tbody>
+                                {sortedTestData.map((player) => (
+                                    <tr key={player.id}>
+                                        <td>
+                                            {highScores.indexOf(player) + 1}.
+                                        </td>
+                                        <td>{player.name}</td>
+                                        <td>{player.time}</td>
+                                        <td>{player.date}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
+                        <button onClick={goToHomeScreen}>Home</button>
                     </div>
                 </div>
             )}
